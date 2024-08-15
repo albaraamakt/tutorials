@@ -22,7 +22,7 @@ class Property(models.Model):
         ),
     ]
 
-    name = fields.Char("Title", required=True)
+    name = fields.Char("Title", required=True, default="Available House")
     description = fields.Text("Description")
     postcode = fields.Char("Postcode")
     date_availability = fields.Date(
@@ -104,13 +104,18 @@ class Property(models.Model):
             self.garden_area = 0
             self.garden_orientation = None
 
-    @api.onchange("offer_ids")
-    def _onchange_offer_ids(self):
-        if self.offer_ids:
-            self.state = "offer_received"
+    # @api.onchange("offer_ids")
+    # def _onchange_offer_ids(self):
+    #     if self.offer_ids:
+    #         self.state = "offer_received"
 
     @api.constrains('selling_price')
     def _check_selling_price(self):
         for record in self:
             if float_compare(record.selling_price, record.expected_price * 0.9, precision_rounding=0.1) == -1:
                 raise ValidationError("Selling price cannot be lower than 90% of the expected price")
+
+    @api.ondelete(at_uninstall=False)
+    def _delete_property(self):
+        if self.state not in ('new', 'canceled'):
+            raise UserError("Only new and canceled properties can be deleted")

@@ -15,8 +15,8 @@ class PropertyOffer(models.Model):
     status = fields.Selection(
         [("accepted", "Accepted"), ("refused", "Refused")], copy=False
     )
-    partner_id = fields.Many2one("res.partner", ondelete="restrict", required=True)
-    property_id = fields.Many2one("estate.property", ondelete="restrict", required=True)
+    partner_id = fields.Many2one("res.partner", ondelete="cascade", required=True)
+    property_id = fields.Many2one("estate.property", ondelete="cascade", required=True)
     property_type_id = fields.Many2one(related="property_id.property_type_id", store=True)
     validity = fields.Integer("Validity (days)", default=7)
     date_deadline = fields.Date(
@@ -40,12 +40,18 @@ class PropertyOffer(models.Model):
     def _compute_date_deadline(self):
         for record in self:
             if record.create_date:
-                record.date_deadline = (
-                    timedelta(days=record.validity) + record.create_date
-                )
+                record.date_deadline = timedelta(days=record.validity) + record.create_date
             else:
-                record.date_deadline = fields.Date.today()
+                record.date_deadline = fields.Date.today() + timedelta(days=7)
 
     def _inverse_date_deadline(self):
         for record in self:
-            record.validity = (record.date_deadline - record.create_date.date()).days
+            if record.create_date:
+                record.validity = (record.date_deadline - record.create_date.date()).days
+            else:
+                record.validity = 1
+
+    @api.model
+    def create(self, vals):
+        self.env['estate.property'].browse(vals['property_id']).state = 'offer_received'
+        return super(PropertyOffer, self).create(vals)

@@ -24,12 +24,12 @@
         <field name="model">estate.property.type</field>
         <field name="arch" type="xml">
             <form string="Property Type">
-                <header>
-                    <button icon="fa-money" class="oe_stat_button" string="Offers" name="%(property_offer_act)d" type="action">
-                        <field name="offer_count"/><br/>Offers
-                    </button>
-                </header>
                 <sheet>
+                    <div name="button_box" position="inside">
+                        <button icon="fa-money" class="oe_stat_button" name="%(property_offer_act)d" type="action">
+                            <field string="Offer" name="offer_count" widget="statinfo"/>
+                        </button>
+                    </div>
                     <h1>
                         <field name="name"/>
                     </h1>
@@ -44,7 +44,6 @@
                             </field>
                         </page>
                         <page string="Offers">
-                            <field name="offer_count"/>
                             <field name="offer_ids"/>
                         </page>
                     </notebook>
