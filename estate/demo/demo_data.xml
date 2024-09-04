@@ -42,16 +42,6 @@
             <field name="living_area" type="int">30</field>
             <field name="facades" type="int">4</field>
             <field name="garage">False</field>
-            <!-- <field name="offer_ids" eval="[
-                Command.create({
-                    'price': 180000,
-                    'partner_id': ref('base.res_partner_12),
-                }),
-                Command.create({
-                    'price': 120000,
-                    'partner_id': ref('base.res_partner_12),
-                }),
-            ]"/> -->
             <field name="offer_ids" eval="[
                 Command.create({
                     'price': 180000,
