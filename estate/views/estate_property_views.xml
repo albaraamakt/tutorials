@@ -86,6 +86,7 @@
                     <group col="2">
                         <group colspan="1">
                             <!-- <field name="state"/> -->
+                            <field name="company_id"/>
                             <field name="property_type_id"/>
                             <field name="postcode"/>
                             <field name="date_availability"/>

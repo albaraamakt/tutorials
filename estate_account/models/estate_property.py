@@ -25,6 +25,11 @@ class Property(models.Model):
                 ),
             ],
         }
-        move = self.env["account.move"].create(vals)
+        self.check_access_rights('write')
+        print('Bro has access to update a record on this model')
+        self.check_access_rule('write')
+        print('Bro even has access to update this specific record.')
+        print(" reached ".center(100, '='))
+        move = self.env["account.move"].sudo().create(vals)
         # print("=================Overriding method working!=================")
         return super(Property, self).set_sold()

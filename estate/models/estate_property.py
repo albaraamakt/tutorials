@@ -23,6 +23,7 @@ class Property(models.Model):
     ]
 
     name = fields.Char("Title", required=True, default="Available House")
+    company_id = fields.Many2one('res.company', default=lambda self: self.env.company, required=True)
     description = fields.Text("Description")
     postcode = fields.Char("Postcode")
     date_availability = fields.Date(

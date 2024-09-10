@@ -3,7 +3,7 @@
         <menuitem id="estate_first_level_menu" name="Advertisements">
             <menuitem id="property_menu_action" action="property_act_window"/>
         </menuitem>
-        <menuitem id="estate_second_menu" name="Settings">
+        <menuitem id="estate_second_menu" name="Settings" groups="estate.estate_group_manager">
             <menuitem id="property_type_menu" action="property_type_act_window"/>
             <menuitem id="property_tag_menu" action="property_tag_act_window"/>
         </menuitem>
