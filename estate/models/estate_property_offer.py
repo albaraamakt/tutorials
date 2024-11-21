@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from odoo import fields, models, api
+from odoo.exceptions import UserError
 
 
 class PropertyOffer(models.Model):
@@ -53,5 +54,9 @@ class PropertyOffer(models.Model):
 
     @api.model
     def create(self, vals):
+        property_state = self.env['estate.property'].browse(vals['property_id']).state
+        if property_state == 'offer_accepted':
+            raise UserError('Property has already been sold.')
+
         self.env['estate.property'].browse(vals['property_id']).state = 'offer_received'
         return super(PropertyOffer, self).create(vals)
