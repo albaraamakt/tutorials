@@ -31,9 +31,9 @@
         <field name="garage">True</field>
         <field name="garden">True</field>
         <field name="garden_area">100000</field>
-        <field name="garden_orientation">S</field>
+        <field name="garden_orientation">south</field>
         <field name="property_type_id" ref="property_residential"/>
-        <field name="user_id" ref="base.user_admin"/>
+        <field name="salesperson" ref="base.user_admin"/>
     </record>
 
     <record id="trailer" model="estate.property">
@@ -50,7 +50,7 @@
         <field name="garage">False</field>
         <field name="garden">True</field>
         <field name="property_type_id" ref="property_residential"/>
-        <field name="user_id" ref="base.user_admin"/>
+        <field name="salesperson" ref="base.user_admin"/>
     </record>
 
     <record id="space_ship" model="estate.property">
@@ -61,7 +61,7 @@
         <field name="date_availability">2030-12-31</field>
         <field name="expected_price">45890000</field>
         <field name="property_type_id" ref="property_industrial"/>
-        <field name="user_id" ref="base.user_admin"/>
+        <field name="salesperson" ref="base.user_admin"/>
     </record>
 
     <record id="cabin" model="estate.property">
@@ -77,7 +77,7 @@
         <field name="garage">False</field>
         <field name="garden">True</field>
         <field name="property_type_id" ref="property_residential"/>
-        <field name="user_id" ref="base.user_admin"/>
+        <field name="salesperson" ref="base.user_admin"/>
     </record>
 
     <!-- Offers -->

@@ -16,10 +16,10 @@
         'views/estate_menus.xml',
         'views/res_users.xml',
         'data/master_data.xml',
-        'demo/demo_data.xml',
+        # 'demo/demo_data.xml',
     ],
 
-    'demo': [
-        'data/demo_data.xml',
-    ]
+    # 'demo': [
+    #     'data/demo_data.xml',
+    # ]
 }
