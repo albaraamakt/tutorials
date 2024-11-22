@@ -74,8 +74,12 @@ class Property(models.Model):
     def set_sold(self):
         if self.state == "canceled":
             raise UserError("This property is canceled and cannot be sold")
-        elif not self.offer_ids:
+
+        if not self.offer_ids:
             raise UserError("This property has not recieved any offers.")
+            
+        if not any(status for status in self.offer_ids.mapped('status')):
+            raise UserError("This property has no accepted offers.")
 
         self.state = "sold"
         return True

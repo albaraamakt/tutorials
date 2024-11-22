@@ -1,6 +1,7 @@
 
 from odoo.tests.common import TransactionCase
-from odoo.tools import tagged
+from odoo.exceptions import UserError
+from odoo.tests import tagged
 
 class EstateTestCase(TransactionCase):
 
@@ -8,24 +9,49 @@ class EstateTestCase(TransactionCase):
     def setUpClass(cls):
         super(EstateTestCase, cls).setUpClass()
 
-        my_company_id = cls.env['res.company'].search([], limit=1).id
+        cls.company = cls.env['res.company'].create({"name": "my_company"})
+        cls.partner = cls.env['res.partner'].create({"name": "partner"})
         cls.property = cls.env['estate.property'].create({
             "name": "Big House",
             "expected_price": 500000.0,
-            "company_id": [4, my_company_id]
+            "company_id": cls.company.id
         })
-        offer_ids = cls.env['estate.property.offer'].create([{
+        cls.offers = cls.env['estate.property.offer'].create([{
             "price": 500000,
-            "partner_id": [4, cls.env['res.partner'].search([], limit=1).id],
-            "property_id": [4, cls.property.id],
+            "partner_id": cls.partner.id,
+            "property_id": cls.property.id
         },
         {
             "price": 600000,
-            "partner_id": [4, cls.env['res.partner'].search([], limit=1).id],
-            "property_id": [4, cls.property.id],
+            "partner_id": cls.partner.id,
+            "property_id": cls.property.id
         }])
 
-    @tagged('test_property')
     def test_create_offer(self):
-        cls.property.offer_ids[1].set_accepted()
+        self.offers[0].set_accepted()
+        self.property.set_sold()
+
+        self.assertRecordValues(self.offers[0], [{"status": "accepted"}])
+        self.assertRecordValues(self.property, [{"state": "sold"}])
+        with self.assertRaises(UserError):
+            self.env['estate.property.offer'].create({
+                "partner_id": self.partner.id,
+                "property_id": self.property.id,
+            })
+
+    def test_selling_sold_property(self):
+        self.assertRecordValues(self.offers, [
+            {
+                "price": 500000,
+                "partner_id": self.partner.id,
+                "property_id": self.property.id,
+            },
+            {
+                "price": 600000,
+                "partner_id": self.partner.id,
+                "property_id": self.property.id,
+            },
+        ])
+        with self.assertRaises(UserError):
+            self.property.set_sold()
 

@@ -55,7 +55,7 @@ class PropertyOffer(models.Model):
     @api.model
     def create(self, vals):
         property_state = self.env['estate.property'].browse(vals['property_id']).state
-        if property_state == 'offer_accepted':
+        if property_state == 'sold':
             raise UserError('Property has already been sold.')
 
         self.env['estate.property'].browse(vals['property_id']).state = 'offer_received'
